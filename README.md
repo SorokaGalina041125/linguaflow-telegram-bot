@@ -26,39 +26,53 @@ LinguaFlow_Bot - это интерактивный Telegram-бот, разраб
 
 ## Структура проекта
 
-LinguaFlow_Bot/
-├── .env.example              # Шаблон переменных окружения
-├── .gitignore                 # Игнорируемые файлы Git
-├── README.md                  # Документация проекта
-├── DB_SCHEMA.md              # Схема базы данных
-├── requirements.txt          # Зависимости Python
-├── alembic.ini               # Конфигурация Alembic
-├── run_bot.py                # Скрипт запуска бота
-├── alembic/                  # Миграции Alembic
-│   ├── env.py
-│   ├── script.py.mako
-│   └── versions/
-├── bot/                      # Основной пакет бота
-│   ├──`__init__.py`
-│   ├── main.py              # Главный файл запуска
-│   ├── config.py            # Конфигурация
-│   ├── handlers/           # Обработчики команд и callback
-│   │   ├──`__init__.py`
-│   │   ├── start.py        # Команда /start
-│   │   ├── training.py     # Тренировки
-│   │   ├── dictionary.py   # Словарь
-│   │   ├── statistics.py   # Статистика
-│   │   └── achievements.py # Достижения
-│   ├── database/           # Работа с БД
-│   │   ├──`__init__.py`
-│   │   ├── database.py    # Подключение к БД
-│   │   ├── models.py      # SQLAlchemy модели
-│   │   └── init_data.py   # Инициализация данных
-│   └── utils/              # Утилиты
-│       ├──`__init__.py`
-│       └── logger.py       # Настройка логирования
-└── scripts/                 # Вспомогательные скрипты
-    └──`__init__.py`
+- **`.env.example`** - Шаблон переменных окружения
+- **`.gitignore`** - Файл исключений Git
+- **`README.md`** - Документация проекта
+- **`DB_SCHEMA.md`** - Схема базы данных
+- **`requirements.txt`** - Зависимости Python
+- **`pyproject.toml`** - Конфигурация проекта и Ruff
+- **`alembic.ini`** - Конфигурация Alembic
+- **`run_bot.py`** - Скрипт запуска бота
+- **`test_migration.py`** - Утилита для проверки миграций
+
+**Директория `alembic/` (миграции):**
+
+- **`alembic/env.py`** - Конфигурация окружения Alembic
+- **`alembic/script.py.mako`** - Шаблон для генерации миграций
+- **`alembic/versions/`** - Файлы миграций
+
+**Директория `bot/` (основной пакет бота):**
+
+- **`bot/__init__.py`** - Инициализация пакета
+- **`bot/main.py`** - Главный файл запуска бота
+- **`bot/config.py`** - Конфигурация (токен, БД, логирование)
+
+**Директория `bot/handlers/` (обработчики команд):**
+
+- **`bot/handlers/__init__.py`** - Инициализация пакета обработчиков
+- **`bot/handlers/start.py`** - Обработчик команды /start и главного меню
+- **`bot/handlers/training.py`** - Обработчики тренировок
+- **`bot/handlers/dictionary.py`** - Обработчики словаря (добавление, удаление, поиск)
+- **`bot/handlers/statistics.py`** - Обработчики статистики
+- **`bot/handlers/achievements.py`** - Обработчики достижений
+
+**Директория `bot/database/` (работа с БД):**
+
+- **`bot/database/__init__.py`** - Инициализация пакета БД
+- **`bot/database/database.py`** - Подключение к базе данных
+- **`bot/database/models.py`** - SQLAlchemy модели
+- **`bot/database/init_data.py`** - Инициализация и заполнение начальными данными
+- **`bot/database/repository.py`** - Репозиторий для общих операций с БД
+
+**Директория `bot/utils/` (утилиты):**
+
+- **`bot/utils/__init__.py`** - Инициализация пакета утилит
+- **`bot/utils/logger.py`** - Настройка логирования
+
+**Директория `scripts/` (вспомогательные скрипты):**
+
+- **`scripts/__init__.py`** - Инициализация пакета скриптов
 
 ## Установка и настройка
 

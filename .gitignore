@@ -65,3 +65,4 @@ test_migration.py
 # Reports (temporary audit and compliance reports)
 AUDIT_REPORT.md
 COMPLIANCE_REPORT.md
+MIGRATION_GUIDE.md
