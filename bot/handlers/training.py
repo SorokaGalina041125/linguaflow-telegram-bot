@@ -120,13 +120,12 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     await update.message.reply_text(text, reply_markup=reply_markup)
                 return
 
-            # Получаем слова для тренировки
-            # Берем общие слова (user_id=None) и слова пользователя
+            # Получаем 4 случайных слова — лимит в запросе вместо загрузки 100 (экономия памяти и времени)
             result = await session.execute(
                 select(Word)
                 .where((Word.user_id.is_(None)) | (Word.user_id == user.id), Word.is_public)
                 .order_by(func.random())
-                .limit(100)
+                .limit(4)
             )
             words = result.scalars().all()
         except DatabaseError as e:
@@ -169,13 +168,28 @@ async def ask_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
             return
 
-        # Выбираем случайное слово
-        correct_word = random.choice(words)
+        if len(words) < 2:
+            text = "📚 *Мало слов для тренировки*\n\nДобавьте ещё слова (нужно минимум 2 разных)."
+            keyboard = [[InlineKeyboardButton("🔙 Главное меню", callback_data="main_menu")]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            if query:
+                await query.edit_message_text(
+                    text, parse_mode="Markdown", reply_markup=reply_markup
+                )
+            elif update.message:
+                await update.message.reply_text(
+                    text, parse_mode="Markdown", reply_markup=reply_markup
+                )
+            return
 
-        # Выбираем 3 неправильных варианта
-        wrong_words = random.sample(
-            [w for w in words if w.id != correct_word.id], min(3, len(words) - 1)
-        )
+        # Работаем с 4 (или меньшим) количеством слов: одно — правильный ответ, остальные — неправильные
+        random.shuffle(words)
+        correct_word = words[0]
+        wrong_words = list(words[1:])
+        # Добиваем до 3 неправильных вариантов дубликатами, если слов меньше 4
+        while len(wrong_words) < 3:
+            wrong_words.append(wrong_words[0] if wrong_words else correct_word)
+        wrong_words = wrong_words[:3]
 
         # Формируем варианты ответов
         if direction == "en_ru":

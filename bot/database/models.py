@@ -29,7 +29,6 @@ class User(Base):
 
     # Связи
     training_sessions = relationship("TrainingSession", back_populates="user")
-    user_dictionary = relationship("UserDictionary", back_populates="user")
     answers = relationship("Answer", back_populates="user")
     statistics = relationship("Statistics", back_populates="user")
     user_achievements = relationship("UserAchievement", back_populates="user")
@@ -65,30 +64,11 @@ class Word(Base):
     # Связи
     category = relationship("Category", back_populates="words")
     user = relationship("User", back_populates="words")
-    user_dictionary = relationship("UserDictionary", back_populates="word")
     answers = relationship("Answer", back_populates="word")
     statistics = relationship("Statistics", back_populates="word")
 
     # Уникальность комбинации слова и пользователя
     __table_args__ = (UniqueConstraint("english_word", "user_id", name="unique_user_word"),)
-
-
-class UserDictionary(Base):
-    """Модель пользовательского словаря"""
-
-    __tablename__ = "user_dictionary"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(BigInteger, ForeignKey("users.telegram_id"), nullable=False)
-    word_id = Column(Integer, ForeignKey("words.id"), nullable=False)
-    custom_translation = Column(String(255))
-
-    # Связи
-    user = relationship("User", back_populates="user_dictionary")
-    word = relationship("Word", back_populates="user_dictionary")
-
-    # Уникальность комбинации пользователя и слова
-    __table_args__ = (UniqueConstraint("user_id", "word_id", name="unique_user_word_dict"),)
 
 
 class TrainingSession(Base):

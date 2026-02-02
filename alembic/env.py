@@ -21,7 +21,7 @@ from bot.database.database import Base
 
 # Импортируем все модели для того, чтобы они были зарегистрированы в Base.metadata
 from bot.database.models import (
-    User, Category, Word, UserDictionary, TrainingSession,
+    User, Category, Word, TrainingSession,
     Answer, Statistics, Achievement, UserAchievement
 )
 

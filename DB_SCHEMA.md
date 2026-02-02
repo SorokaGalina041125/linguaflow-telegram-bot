@@ -20,7 +20,6 @@
 **Связи:**
 
 - Один ко многим с `training_sessions` (user_id → users.telegram_id)
-- Один ко многим с `user_dictionary` (user_id → users.telegram_id)
 - Один ко многим с `answers` (user_id → users.telegram_id)
 - Один ко многим с `statistics` (user_id → users.telegram_id)
 - Один ко многим с `user_achievements` (user_id → users.telegram_id)
@@ -66,7 +65,6 @@
 
 - Многие к одному с `categories` (category_id → categories.id)
 - Многие к одному с `users` (user_id → users.id)
-- Один ко многим с `user_dictionary` (word_id → words.id)
 - Один ко многим с `answers` (word_id → words.id)
 - Один ко многим с `statistics` (word_id → words.id)
 
@@ -78,29 +76,7 @@
 
 ---
 
-### 4. Таблица `user_dictionary` - Пользовательские слова
-
-Хранит пользовательские переводы и настройки для слов.
-
-| Атрибут              | Тип          | Ограничения                               | Описание                   |
-|----------------------|--------------|-------------------------------------------|----------------------------|
-| `id`                 | INTEGER      | PRIMARY KEY, AUTO_INCREMENT               | Уникальный ID записи       |
-| `user_id`            | BIGINT       | FOREIGN KEY → users.telegram_id, NOT NULL | ID пользователя в Telegram |
-| `word_id`            | INTEGER      | FOREIGN KEY → words.id, NOT NULL          | ID слова                   |
-| `custom_translation` | VARCHAR(255) | NULL                                      | Пользовательский перевод   |
-
-**Ограничения:**
-
-- `UNIQUE(user_id, word_id)` - уникальность комбинации пользователя и слова
-
-**Связи:**
-
-- Многие к одному с `users` (user_id → users.telegram_id)
-- Многие к одному с `words` (word_id → words.id)
-
----
-
-### 5. Таблица `training_sessions` - Тренировки
+### 4. Таблица `training_sessions` - Тренировки
 
 Хранит информацию о сессиях тренировок пользователей.
 
@@ -121,7 +97,7 @@
 
 ---
 
-### 6. Таблица `answers` - Ответы
+### 5. Таблица `answers` - Ответы
 
 Хранит информацию об ответах пользователей на вопросы в тренировках.
 
@@ -145,7 +121,7 @@
 
 ---
 
-### 7. Таблица `statistics` - Статистика
+### 6. Таблица `statistics` - Статистика
 
 Хранит статистику изучения слов пользователями (алгоритм интервального повторения).
 
@@ -173,7 +149,7 @@
 
 ---
 
-### 8. Таблица `achievements` - Достижения
+### 7. Таблица `achievements` - Достижения
 
 Хранит информацию о доступных достижениях в системе.
 
@@ -200,7 +176,7 @@
 
 ---
 
-### 9. Таблица `user_achievements` - Пользовательские достижения
+### 8. Таблица `user_achievements` - Пользовательские достижения
 
 Хранит информацию о разблокированных достижениях пользователей.
 
@@ -229,7 +205,6 @@
 ## Диаграмма связей
 
 users (1) ──< (N) training_sessions
-users (1) ──< (N) user_dictionary
 users (1) ──< (N) answers
 users (1) ──< (N) statistics
 users (1) ──< (N) user_achievements
@@ -237,7 +212,6 @@ users (1) ──< (N) words
 
 categories (1) ──< (N) words
 
-words (1) ──< (N) user_dictionary
 words (1) ──< (N) answers
 words (1) ──< (N) statistics
 
@@ -249,7 +223,6 @@ achievements (1) ──< (N) user_achievements
 
 - `users.telegram_id` - индекс для быстрого поиска пользователей по Telegram ID
 - `words.english_word` и `words.user_id` - для уникальности комбинации
-- `user_dictionary.user_id` и `user_dictionary.word_id` - для уникальности комбинации
 - `statistics.user_id` и `statistics.word_id` - составной первичный ключ
 - `user_achievements.user_id` и `user_achievements.achievement_id` - составной первичный ключ
 
